@@ -49,13 +49,13 @@ namespace MarketBasketAnalysis
                 }
             }
 
-            //foreach (var item in candidates1)
-            //{
-            //    if (item.Value < minimumSupportCount)
-            //    {
-            //        candidates1.Remove(item.Key);
-            //    }
-            //}
+            foreach (var item in candidates1)
+            {
+                if (item.Value < minimumSupportCount)
+                {
+                    candidates1.Remove(item.Key);
+                }
+            }
 
             foreach (var item in candidates1)
             {
