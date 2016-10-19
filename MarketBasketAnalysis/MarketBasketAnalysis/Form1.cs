@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MarketBasketAnalysis.Logic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -34,37 +35,10 @@ namespace MarketBasketAnalysis
 
             int minimumSupportCount = 2;
 
-            Dictionary<string, int> firstCandidates = new Dictionary<string, int>();
+            Apriori apriori = new Apriori(transactions, minimumSupportCount);
 
-            foreach (var transaction in transactions)
-            {
-                foreach (var item in transaction.Value)
-                {
-                    if (firstCandidates != null && firstCandidates.Keys.Contains(item))
-                    {
-                        firstCandidates[item] += 1;
-                        continue;
-                    }
-
-                    firstCandidates.Add(item, 1);
-                }
-            }
-
-            List<string> notSupported = new List<string>();
-
-            foreach (var item in firstCandidates)
-            {
-                if (item.Value < minimumSupportCount)
-                {
-                    notSupported.Add(item.Key);                    
-                }
-            }
-
-            foreach(var key in notSupported)
-            {
-                firstCandidates.Remove(key);
-            }
-
+            Dictionary<string, int> firstCandidates = apriori.ExtractSupported(apriori.FirstCandidates(transactions));                     
+            
             foreach (var item in firstCandidates)
             {
                 listBox1.Items.Add(item);
