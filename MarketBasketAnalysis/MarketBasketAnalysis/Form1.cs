@@ -21,17 +21,17 @@ namespace MarketBasketAnalysis
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Dictionary<int, List<string>> transactions = new Dictionary<int, List<string>>();
+            List<List<string>> transactions = new List<List<string>>();
             List<string> lista = new List<string> { "1", "3", "4" };
             List<string> lista1 = new List<string> { "2", "3", "5" };
             List<string> lista2 = new List<string> { "1", "2", "3", "5" };
             List<string> lista3 = new List<string> { "2", "5" };
             List<string> lista4 = new List<string> { "1", "3", "5" };
-            transactions.Add(0, lista);
-            transactions.Add(1, lista1);
-            transactions.Add(2, lista2);
-            transactions.Add(3, lista3);
-            transactions.Add(4, lista4);
+            transactions.Add(lista);
+            transactions.Add(lista1);
+            transactions.Add(lista2);
+            transactions.Add(lista3);
+            transactions.Add(lista4);
 
             int minimumSupportCount = 2;
 
@@ -47,26 +47,51 @@ namespace MarketBasketAnalysis
             //Second Canditates
             Dictionary<string, int> secondCandidates = new Dictionary<string, int>();
 
-            List<string> myList = new List<string> { "A", "B", "C", "D", "Z" };
+            List<string> myList = firstCandidates.Keys.ToList();//new List<string> { "A", "B", "C", "D", "Z" };
+            List<string> myListSecond = firstCandidates.Keys.ToList();//new List<string> { "A", "B", "C", "D", "Z" };
             //Regex r
 
             foreach (var item in myList)
             {
                 listBox2.Items.Add(item);
-            }
-
-            List<string> myList2 = new List<string>();
+            }            
 
             while(myList.Count != 0)
             {                
-                for(int i = 1 ; i<myList.Count;i++)
-                {                   
-                    myList2.Add(myList.ElementAt(0) + "," + myList.ElementAt(i));
+                for(int i = 1 ; i<myListSecond.Count;i++)
+                {   
+                    if (myList.ElementAt(0) == myListSecond.ElementAt(i) || 
+                        secondCandidates.Keys.Contains(myList.ElementAt(0) + "," + myListSecond.ElementAt(i)) ||
+                        secondCandidates.Keys.Contains(myListSecond.ElementAt(i) + "," + myList.ElementAt(0)))
+                    {
+                        continue;
+                    }
+                    secondCandidates.Add(myList.ElementAt(0) + "," + myListSecond.ElementAt(i), 0);
                 }
                 myList.RemoveAt(0);                
             }
 
-            foreach (var item in myList2)
+
+            foreach(var key in secondCandidates.Keys.ToList())
+            {
+                List<string> tempSplit = key.Split(',').ToList();
+
+                foreach(List<string> transaction in transactions)
+                {
+
+                    var xxx = tempSplit.Except(transaction);
+
+                    if(tempSplit.Except(transaction).Any())
+                    {
+                        continue;
+                    }
+                    secondCandidates[key] += 1;
+                }
+            }
+
+            
+
+            foreach (var item in secondCandidates)
             {
                 listBox3.Items.Add(item);
             }
@@ -74,8 +99,7 @@ namespace MarketBasketAnalysis
 
             //Third Candidates
             List<string> myList3 = new List<string>();
-
-            var isExist = myList.Except(myList2);
+                      
 
             List<string> list1 = new List<string> { "Aa", "Bb", "Cc" };
             List<string> list2 = new List<string> { "Aa", "Cc", "Bb", "Bb" };
@@ -86,26 +110,33 @@ namespace MarketBasketAnalysis
             var cos2 = list1.Except(list2).Any();
             var cos3 = list1.Except(list3).Any();
 
-            foreach (var item in myList2)
+            listBox4.Items.Add(cos3);
+
+            foreach (var item in cos1)
             {
-                List<string> tempSplit = item.Split(',').ToList();
-                //List<string> tempLeft = new List<string>();
-
-                var cose = tempSplit.Except(myList);
-                                
-                //foreach(var itemFirst in myList)
-                //{
-                //    var result = tempSplit.Except(itemFirst);
-                    //if(tempSplit.Except(item))
-                    //{
-
-                    //}
-                //}
-                //if (result.Count() == 0)
-                //{
-                //    myList3.Add(item + "," + )
-                //}
+                listBox4.Items.Add(item);
             }
+
+            //foreach (var item in myList2)
+            //{
+            //List<string> tempSplit = item.Split(',').ToList();
+            //List<string> tempLeft = new List<string>();
+
+            //var cose = tempSplit.Except(myList);
+
+            //foreach(var itemFirst in myList)
+            //{
+            //    var result = tempSplit.Except(itemFirst);
+            //if(tempSplit.Except(item))
+            //{
+
+            //}
+            //}
+            //if (result.Count() == 0)
+            //{
+            //    myList3.Add(item + "," + )
+            //}
+            //}
 
 
 

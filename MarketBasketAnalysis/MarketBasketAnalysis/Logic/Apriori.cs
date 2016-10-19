@@ -8,18 +8,18 @@ namespace MarketBasketAnalysis.Logic
 {
     class Apriori
     {
-        private Dictionary<int, List<string>> transactions;
+        private List<List<string>> transactions;
         public int MinimumSupportCount { private get; set; }
 
 
 
-        public Apriori(Dictionary<int, List<string>> transactions, int minimumSupportCount)
+        public Apriori(List<List<string>> transactions, int minimumSupportCount)
         {
             this.transactions = transactions;
             this.MinimumSupportCount = minimumSupportCount;
         }
 
-        public Dictionary<string, int> FirstCandidates(Dictionary<int, List<string>> trans)
+        public Dictionary<string, int> FirstCandidates(List<List<string>> trans)
         {
             if (trans == null)
                 return null;
@@ -28,7 +28,7 @@ namespace MarketBasketAnalysis.Logic
 
             foreach (var transaction in trans)
             {
-                foreach (var item in transaction.Value)
+                foreach (var item in transaction)
                 {
                     if (firstCandidates != null && firstCandidates.Keys.Contains(item))
                     {
