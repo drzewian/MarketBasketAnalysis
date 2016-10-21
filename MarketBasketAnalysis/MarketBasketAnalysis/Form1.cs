@@ -37,123 +37,95 @@ namespace MarketBasketAnalysis
 
             Apriori apriori = new Apriori(transactions, minimumSupportCount);
 
-            Dictionary<string, int> firstCandidates = apriori.ExtractSupported(apriori.FirstCandidates(transactions));                     
+            apriori.Start();                     
             
-            foreach (var item in firstCandidates)
+            foreach (var item in apriori.fFrequent)
             {
                 listBox1.Items.Add(item);
             }
 
-            //Second Canditates
-            Dictionary<string, int> secondCandidates = new Dictionary<string, int>();
-
-            List<string> myList = firstCandidates.Keys.ToList();//new List<string> { "A", "B", "C", "D", "Z" };
-            List<string> myListSecond = firstCandidates.Keys.ToList();//new List<string> { "A", "B", "C", "D", "Z" };
-            //Regex r
-
-            foreach (var item in myList)
+            foreach (var item in apriori.sFrequent)
             {
                 listBox2.Items.Add(item);
-            }            
-
-            while(myList.Count != 0)
-            {                
-                for(int i = 1 ; i<myListSecond.Count;i++)
-                {   
-                    if (myList.ElementAt(0) == myListSecond.ElementAt(i) || 
-                        secondCandidates.Keys.Contains(myList.ElementAt(0) + "," + myListSecond.ElementAt(i)) ||
-                        secondCandidates.Keys.Contains(myListSecond.ElementAt(i) + "," + myList.ElementAt(0)))
-                    {
-                        continue;
-                    }
-                    secondCandidates.Add(myList.ElementAt(0) + "," + myListSecond.ElementAt(i), 0);
-                }
-                myList.RemoveAt(0);                
             }
 
-
-            foreach(var key in secondCandidates.Keys.ToList())
-            {
-                List<string> tempSplit = key.Split(',').ToList();
-
-                foreach(List<string> transaction in transactions)
-                {
-
-                    var xxx = tempSplit.Except(transaction);
-
-                    if(tempSplit.Except(transaction).Any())
-                    {
-                        continue;
-                    }
-                    secondCandidates[key] += 1;
-                }
-            }
-
-            
-
-            foreach (var item in secondCandidates)
+            foreach (var item in apriori.tFrequent)
             {
                 listBox3.Items.Add(item);
             }
 
+            string myString = "1,2,3";
 
-            //Third Candidates
-            List<string> myList3 = new List<string>();
-                      
+            List<string> myList = PruneElements(myString);
 
-            List<string> list1 = new List<string> { "Aa", "Bb", "Cc" };
-            List<string> list2 = new List<string> { "Aa", "Cc", "Bb", "Bb" };
-            List<string> list3 = new List<string> { "Aa", "Bb", "Dd" };
-
-            var cos = list1.Except(list2);
-            var cos1 = list1.Except(list3);
-            var cos2 = list1.Except(list2).Any();
-            var cos3 = list1.Except(list3).Any();
-
-            listBox4.Items.Add(cos3);
-
-            foreach (var item in cos1)
+            foreach (var item in myList)
             {
                 listBox4.Items.Add(item);
             }
 
-            //foreach (var item in myList2)
+
+            ////Second Canditates
+            //Dictionary<string, int> secondCandidates = new Dictionary<string, int>();
+
+            //List<string> myList = /*firstCandidates.Keys.ToList();/*/new List<string> { "1,3", "1,5", "2,3", "2,5", "3,5" };
+            //List<string> myListSecond = /*firstCandidates.Keys.ToList();/*/new List<string> { "1", "2", "3", "5" };
+            ////Regex r
+
+            //foreach (var item in myList)
             //{
-            //List<string> tempSplit = item.Split(',').ToList();
-            //List<string> tempLeft = new List<string>();
+            //    listBox2.Items.Add(item);
+            //}            
 
-            //var cose = tempSplit.Except(myList);
-
-            //foreach(var itemFirst in myList)
-            //{
-            //    var result = tempSplit.Except(itemFirst);
-            //if(tempSplit.Except(item))
-            //{
-
-            //}
-            //}
-            //if (result.Count() == 0)
-            //{
-            //    myList3.Add(item + "," + )
-            //}
-            //}
-
-
-
-            //foreach (var transaction in transactions)
-            //{
-            //    foreach (var item in transaction.Value)
-            //    {
-            //        if (firstCandidates != null && firstCandidates.Keys.Contains(item))
+            //while(myList.Count != 0)
+            //{                
+            //    for(int i = 1 ; i<myListSecond.Count;i++)
+            //    {   
+            //        if (IsContainElement(myList.ElementAt(0), myListSecond.ElementAt(i)) ||
+            //            IsContainElement(myList.ElementAt(0) + "," + myListSecond.ElementAt(i), secondCandidates.Keys.ToList()))                        
             //        {
-            //            firstCandidates[item] += 1;
             //            continue;
             //        }
-
-            //        firstCandidates.Add(item, 1);
+            //        secondCandidates.Add(myList.ElementAt(0) + "," + myListSecond.ElementAt(i), 0);
             //    }
+            //    myList.RemoveAt(0);                
             //}
 
+
+            //foreach(var key in secondCandidates.Keys.ToList())
+            //{
+            //    List<string> tempSplit = key.Split(',').ToList();
+
+            //    foreach(List<string> transaction in transactions)
+            //    {                    
+            //        if(tempSplit.Except(transaction).Any())
+            //        {
+            //            continue;
+            //        }
+            //        secondCandidates[key] += 1;
+            //    }
+            //}            
+        }
+
+        private List<string> PruneElements(string item)
+        {
+            List<string> elements = new List<string>();
+            List<string> itemList = item.Split(',').ToList();            
+
+            for (int i = 0; i < itemList.Count; i++)
+            {
+                List<string> temp = new List<string>(itemList);
+                temp.RemoveAt(i);
+
+                StringBuilder tempString = new StringBuilder(temp[0]);
+
+                for (int j = 1; j < temp.Count; j++)
+                {
+                    tempString.Append("," + temp[j]);
+                }
+                elements.Add(tempString.ToString());
+            }
+
+            return elements;
         }
     }
 }
