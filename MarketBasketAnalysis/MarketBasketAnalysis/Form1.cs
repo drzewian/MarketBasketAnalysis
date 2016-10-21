@@ -22,18 +22,27 @@ namespace MarketBasketAnalysis
         private void button1_Click(object sender, EventArgs e)
         {
             List<List<string>> transactions = new List<List<string>>();
-            List<string> lista = new List<string> { "1", "3", "4" };
-            List<string> lista1 = new List<string> { "2", "3", "5" };
-            List<string> lista2 = new List<string> { "1", "2", "3", "5" };
-            List<string> lista3 = new List<string> { "2", "5" };
-            List<string> lista4 = new List<string> { "1", "3", "5" };
-            transactions.Add(lista);
+            List<string> lista1 = new List<string> { "bread", "peanuts", "milk", "fruit", "jam" };
+            List<string> lista2 = new List<string> { "bread", "jam", "soda", "chips", "milk", "fruit" };
+            List<string> lista3 = new List<string> { "steak", "jam", "soda", "chips", "bread" };
+            List<string> lista4 = new List<string> { "jam", "soda", "peanuts", "milk", "fruit" };
+            List<string> lista5 = new List<string> { "jam", "soda", "chips", "milk", "bread" };
+            List<string> lista6 = new List<string> { "fruit", "soda", "chips", "milk" };
+            List<string> lista7 = new List<string> { "fruit", "soda", "peanuts", "milk" };
+            List<string> lista8 = new List<string> { "fruit", "peanuts", "cheese", "yogurt" };
+            //List<string> lista9 = new List<string> { "I1", "I2", "I3" };
+
             transactions.Add(lista1);
             transactions.Add(lista2);
             transactions.Add(lista3);
             transactions.Add(lista4);
+            transactions.Add(lista5);
+            transactions.Add(lista6);
+            transactions.Add(lista7);
+            transactions.Add(lista8);
+            //transactions.Add(lista9);
 
-            int minimumSupportCount = 2;
+            int minimumSupportCount = 4;
 
             Apriori apriori = new Apriori(transactions, minimumSupportCount);
 
@@ -54,9 +63,19 @@ namespace MarketBasketAnalysis
                 listBox3.Items.Add(item);
             }
 
+            foreach (var item in apriori.foFrequent)
+            {
+                listBox4.Items.Add(item);
+            }
+
             string myString = "1,2,3";
 
             List<string> myList = PruneElements(myString);
+
+            List<string> toPruneList = new List<string> { "1,2", "1,3", "2,3" };
+            List<string> PruneList = new List<string> { "1,3", "1,5", "3,2", "2,5", "3,5" };
+
+            listBox4.Items.Add(NeedToBePrune(toPruneList, PruneList));
 
             foreach (var item in myList)
             {
@@ -126,6 +145,33 @@ namespace MarketBasketAnalysis
             }
 
             return elements;
+        }
+
+        private bool NeedToBePrune(List<string> firstElement, List<string> secondElement)
+        {
+            if (firstElement == null || secondElement == null)
+            {
+                return false;
+            }           
+
+            foreach (var item in firstElement)
+            {
+                int counter = 0;
+                List<string> tempElements = item.Split(',').ToList();
+
+                foreach (var element in secondElement)
+                {
+                    if (!tempElements.Except(element.Split(',').ToList()).Any())
+                    {
+                        counter+=1;
+                    }                    
+                }
+                if(counter == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

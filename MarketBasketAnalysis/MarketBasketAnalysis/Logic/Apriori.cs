@@ -30,6 +30,7 @@ namespace MarketBasketAnalysis.Logic
             fFrequent = ExtractSupported(firstCandidates);
             sFrequent = ExtractSupported(NextCandidates(fFrequent.Keys.ToList(), fFrequent.Keys.ToList()));
             tFrequent = ExtractSupported(NextCandidates(sFrequent.Keys.ToList(), fFrequent.Keys.ToList()));
+            foFrequent = /*ExtractSupported*/(NextCandidates(tFrequent.Keys.ToList(), fFrequent.Keys.ToList()));
 
         }
 
@@ -69,9 +70,9 @@ namespace MarketBasketAnalysis.Logic
 
             foreach(var key in tempList)
             {
-                Dictionary<string, int> tempDict = CreateCandidates(key.Split(',').ToList(), key.Split(',').ToList());
+                List<string> pruneList = PruneElements(key);
 
-                if (NeedToBePrune(tempDict.Keys.ToList(), firstCandidates))
+                if (NeedToBePrune(pruneList, previousCandidates))
                 {
                     nextCandidates.Remove(key);
                 }
@@ -83,7 +84,7 @@ namespace MarketBasketAnalysis.Logic
 
         private Dictionary<string, int> CreateCandidates(List<string> previousCandidates, List<string> firstCandidates)
         {
-            List<string> tempList = previousCandidates;
+            List<string> tempList = new List<string>(previousCandidates);
             Dictionary<string, int> nextCandidates = new Dictionary<string, int>();
 
             while (tempList.Count != 0)
@@ -95,7 +96,7 @@ namespace MarketBasketAnalysis.Logic
                     {
                         continue;
                     }
-                    nextCandidates.Add(previousCandidates.ElementAt(0) + "," + firstCandidates.ElementAt(i), 0);
+                    nextCandidates.Add(tempList.ElementAt(0) + "," + firstCandidates.ElementAt(i), 0);
                 }
                 tempList.RemoveAt(0);
             }
@@ -148,22 +149,7 @@ namespace MarketBasketAnalysis.Logic
                 }
             }
             return false;
-        }
-
-        private bool NeedToBePrune(List<string> firstElement, List<string> secondElement)
-        {
-            if (firstElement == null || secondElement == null)
-            {
-                return false;
-            }
-
-            if (firstElement.Except(secondElement).Any())
-            {
-                return true;
-            }
-
-            return false;
-        }
+        }       
 
         private void CountCandidates(Dictionary<string, int> candidates)
         {
@@ -180,6 +166,33 @@ namespace MarketBasketAnalysis.Logic
                     candidates[key] += 1;
                 }
             }
+        }
+
+        private bool NeedToBePrune(List<string> firstElement, List<string> secondElement)
+        {
+            if (firstElement == null || secondElement == null)
+            {
+                return false;
+            }
+
+            foreach (var item in firstElement)
+            {
+                int counter = 0;
+                List<string> tempElements = item.Split(',').ToList();
+
+                foreach (var element in secondElement)
+                {
+                    if (!tempElements.Except(element.Split(',').ToList()).Any())
+                    {
+                        counter += 1;
+                    }
+                }
+                if (counter == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private List<string> PruneElements(string item)
