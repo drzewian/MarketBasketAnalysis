@@ -11,27 +11,40 @@ namespace MarketBasketAnalysis.Logic
         private List<List<string>> transactions;
         public int MinimumSupportCount { get; private set; }
         public Dictionary<string, int> FrequentItemSets { get; private set; }
+        public Dictionary<string, int> FirstFrequent { get; private set; }
 
-        public Dictionary<string, int> fFrequent;
-        public Dictionary<string, int> sFrequent;
-        public Dictionary<string, int> tFrequent;
-        public Dictionary<string, int> foFrequent;
-
-
-        public Apriori(List<List<string>> transactions, int minimumSupportCount)
+        
+        public Apriori(List<List<string>> transactions)
         {
             this.transactions = transactions;
-            this.MinimumSupportCount = minimumSupportCount;
+            MinimumSupportCount = 1;
+            FrequentItemSets = new Dictionary<string, int>();
+            FirstFrequent = ExtractSupported(FirstCandidates(transactions));
         }
 
-        public void Start()
+        public void SetUp(int minimumSupportCount)
         {
-            Dictionary<string,int> firstCandidates = FirstCandidates(transactions);
-            fFrequent = ExtractSupported(firstCandidates);
-            sFrequent = ExtractSupported(NextCandidates(fFrequent.Keys.ToList(), fFrequent.Keys.ToList()));
-            tFrequent = ExtractSupported(NextCandidates(sFrequent.Keys.ToList(), fFrequent.Keys.ToList()));
-            foFrequent = /*ExtractSupported*/(NextCandidates(tFrequent.Keys.ToList(), fFrequent.Keys.ToList()));
+            FrequentItemSets = new Dictionary<string, int>();
+            MinimumSupportCount = minimumSupportCount;
+            FirstFrequent = ExtractSupported(FirstCandidates(transactions));
+        }
 
+        public void FindFrequent()
+        {
+            if(FirstFrequent == null)
+            {
+                throw new ArgumentNullException();
+            }
+            Dictionary<string, int> tempCandidates = new Dictionary<string, int>(FirstFrequent);
+
+            for(int i =0; i<FirstFrequent.Count - 1; i++)
+            {
+                tempCandidates = ExtractSupported(NextCandidates(tempCandidates.Keys.ToList(), FirstFrequent.Keys.ToList()));
+                foreach (var key in tempCandidates.Keys)
+                {                    
+                    FrequentItemSets.Add(key, tempCandidates[key]);
+                }
+            }
         }
 
         private Dictionary<string, int> FirstCandidates(List<List<string>> trans)
