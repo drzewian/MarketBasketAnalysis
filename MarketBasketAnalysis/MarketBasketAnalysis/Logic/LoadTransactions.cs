@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MarketBasketAnalysis.Logic
@@ -22,6 +23,8 @@ namespace MarketBasketAnalysis.Logic
             List<string> trans;
 
             string line;
+            string pattern = @"^([a-z0-9]+)(\s*)(,\s*[a-z0-9\s]+)*$";
+            Regex rgx = new Regex(pattern, RegexOptions.IgnoreCase);
 
             while ((line = sr.ReadLine()) != null)
             {
@@ -29,11 +32,19 @@ namespace MarketBasketAnalysis.Logic
 
                 foreach(var item in line.Split(','))
                 {
+                    if (!rgx.IsMatch(line))
+                    {
+                        throw new FormatException("Invalid or corrupted file. Please try again.");
+                    }
                     trans.Add(item.Trim().ToLower());
                 }
                 transactions.Add(trans);
             }
-            return transactions;
-        }
+
+            if(transactions.Count != 0)
+                return transactions;
+
+            throw new FormatException("Invalid or corrupted file. Please try again.");
+        }        
     }
 }

@@ -64,34 +64,28 @@ namespace MarketBasketAnalysis
                             StreamReader sr = new StreamReader(myStream);
                             LoadTransactions lt = new LoadTransactions(sr);
                             transactions = lt.Load();
+                            apriori = new Apriori(transactions);                                                                                     
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
 
-            if (transactions != null)
-            {
-                listBox1.Items.Clear();
-                listBox2.Items.Clear();
-                listBox3.Items.Clear();
+            listBox1.Items.Clear();
+            listBox2.Items.Clear();
+            listBox3.Items.Clear();
 
-                apriori = new Apriori(transactions);
-                trackBar1.Maximum = apriori.FirstFrequent.Values.ToList().Max();
-                labelSupportMax.Text = trackBar1.Maximum.ToString();
+            trackBar1.Maximum = apriori.FirstFrequent.Values.ToList().Max();
+            labelSupportMax.Text = trackBar1.Maximum.ToString();
 
-                button1.Enabled = true;                
-                trackBar1.Enabled = true;
-                trackBar2.Enabled = true;
-                button3.Enabled = false;
-            }
-            else
-            {
-                MessageBox.Show("Load error. Try again.");
-            }
+            button1.Enabled = true;
+            trackBar1.Enabled = true;
+            trackBar2.Enabled = true;
+            button3.Enabled = false;
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -102,6 +96,12 @@ namespace MarketBasketAnalysis
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
             textBoxConfidenceValue.Text = trackBar2.Value.ToString();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            listBox3.Items.Clear();
+            apriori.CheckConfidence(trackBar2.Value);
         }
     }
 }

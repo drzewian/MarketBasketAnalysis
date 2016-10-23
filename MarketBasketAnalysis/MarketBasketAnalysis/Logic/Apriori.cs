@@ -9,8 +9,9 @@ namespace MarketBasketAnalysis.Logic
     class Apriori
     {
         private List<List<string>> transactions;
-        public int MinimumSupportCount { get; private set; }
+        public int MinimumSupportCount { get; private set; }        
         public Dictionary<string, int> FrequentItemSets { get; private set; }
+        public Dictionary<string, double> ConfidenceItemSets { get; private set; }
         public Dictionary<string, int> FirstFrequent { get; private set; }
 
         
@@ -18,6 +19,7 @@ namespace MarketBasketAnalysis.Logic
         {
             this.transactions = transactions;
             MinimumSupportCount = 1;
+            MinimumConfidence = 1;
             FrequentItemSets = new Dictionary<string, int>();
             FirstFrequent = ExtractSupported(FirstCandidates(transactions));
         }
@@ -46,6 +48,11 @@ namespace MarketBasketAnalysis.Logic
                 }
             }
         }
+
+        public void CheckConfidence(int minimumConfidence)
+        {
+
+        } 
 
         private Dictionary<string, int> FirstCandidates(List<List<string>> trans)
         {
