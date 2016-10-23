@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -38,42 +39,69 @@ namespace MarketBasketAnalysis
             foreach (var item in apriori.FrequentItemSets)
             {
                 listBox2.Items.Add(item);
-            }            
+            }
+
+            button3.Enabled = true;            
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            transactions = new List<List<string>>();
+            Stream myStream = null;
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                        
+            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
 
-            List<string> lista1 = new List<string> { "bread", "peanuts", "milk", "fruit", "jam" };
-            List<string> lista2 = new List<string> { "bread", "jam", "soda", "chips", "milk", "fruit" };
-            List<string> lista3 = new List<string> { "steak", "jam", "soda", "chips", "bread" };
-            List<string> lista4 = new List<string> { "jam", "soda", "peanuts", "milk", "fruit" };
-            List<string> lista5 = new List<string> { "jam", "soda", "chips", "milk", "bread" };
-            List<string> lista6 = new List<string> { "fruit", "soda", "chips", "milk" };
-            List<string> lista7 = new List<string> { "fruit", "soda", "peanuts", "milk" };
-            List<string> lista8 = new List<string> { "fruit", "peanuts", "cheese", "yogurt" };
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    if ((myStream = openFileDialog1.OpenFile()) != null)
+                    {
+                        using (myStream)
+                        {
+                            StreamReader sr = new StreamReader(myStream);
+                            LoadTransactions lt = new LoadTransactions(sr);
+                            transactions = lt.Load();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                }
+            }
 
-            transactions.Add(lista1);
-            transactions.Add(lista2);
-            transactions.Add(lista3);
-            transactions.Add(lista4);
-            transactions.Add(lista5);
-            transactions.Add(lista6);
-            transactions.Add(lista7);
-            transactions.Add(lista8);
+            if (transactions != null)
+            {
+                listBox1.Items.Clear();
+                listBox2.Items.Clear();
+                listBox3.Items.Clear();
 
-            apriori = new Apriori(transactions);
-            trackBar1.Maximum = apriori.FirstFrequent.Values.ToList().Max();
-            labelSupportMax.Text = trackBar1.Maximum.ToString();
+                apriori = new Apriori(transactions);
+                trackBar1.Maximum = apriori.FirstFrequent.Values.ToList().Max();
+                labelSupportMax.Text = trackBar1.Maximum.ToString();
 
-            button1.Enabled = true;
-            trackBar1.Enabled = true;
+                button1.Enabled = true;                
+                trackBar1.Enabled = true;
+                trackBar2.Enabled = true;
+                button3.Enabled = false;
+            }
+            else
+            {
+                MessageBox.Show("Load error. Try again.");
+            }
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
             textBoxSupportValue.Text = trackBar1.Value.ToString();
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            textBoxConfidenceValue.Text = trackBar2.Value.ToString();
         }
     }
 }
