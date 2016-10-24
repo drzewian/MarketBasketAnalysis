@@ -18,8 +18,7 @@ namespace MarketBasketAnalysis.Logic
         public Apriori(List<List<string>> transactions)
         {
             this.transactions = transactions;
-            MinimumSupportCount = 1;
-            MinimumConfidence = 1;
+            MinimumSupportCount = 1;            
             FrequentItemSets = new Dictionary<string, int>();
             FirstFrequent = ExtractSupported(FirstCandidates(transactions));
         }
@@ -96,8 +95,7 @@ namespace MarketBasketAnalysis.Logic
                 {
                     nextCandidates.Remove(key);
                 }
-            }
-            
+            }            
             CountCandidates(nextCandidates);
             return nextCandidates;
         }
@@ -119,8 +117,7 @@ namespace MarketBasketAnalysis.Logic
                     nextCandidates.Add(tempList.ElementAt(0) + "," + firstCandidates.ElementAt(i), 0);
                 }
                 tempList.RemoveAt(0);
-            }
-                        
+            }                        
             return nextCandidates;
         }
 
@@ -141,7 +138,6 @@ namespace MarketBasketAnalysis.Logic
             {
                 candidates.Remove(key);
             }
-
             return candidates;
         }
 
@@ -233,7 +229,6 @@ namespace MarketBasketAnalysis.Logic
                 }
                 elements.Add(tempString.ToString());
             }
-
             return elements;
         } 
     }
