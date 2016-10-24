@@ -1,0 +1,8 @@
+Bread, peanuts, milk, fruit, Jam
+bread, jam, soda, chips, milk, Fruit
+steak, jam, Soda, chips, bread
+jam, soda, peanuts, milk, fruit
+jam,soda,chips, milk,bread
+fruit, Soda,chips,milk
+fruit,soda,peanuts, Milk
+fruit,peanuts, Cheese,yogurt
