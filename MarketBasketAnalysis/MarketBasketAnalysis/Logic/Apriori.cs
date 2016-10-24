@@ -18,8 +18,7 @@ namespace MarketBasketAnalysis.Logic
         public Apriori(List<List<string>> transactions)
         {
             this.transactions = transactions;
-            MinimumSupportCount = 1;
-            MinimumConfidence = 1;
+            MinimumSupportCount = 1;            
             FrequentItemSets = new Dictionary<string, int>();
             FirstFrequent = ExtractSupported(FirstCandidates(transactions));
         }
