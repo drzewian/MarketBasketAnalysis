@@ -95,7 +95,7 @@ namespace MarketBasketAnalysis
 
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
-            textBoxConfidenceValue.Text = trackBar2.Value.ToString();
+            textBoxConfidenceValue.Text = trackBar2.Value.ToString() + "%";
         }
 
         private void button3_Click(object sender, EventArgs e)

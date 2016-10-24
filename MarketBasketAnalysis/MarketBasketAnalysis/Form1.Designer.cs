@@ -111,9 +111,11 @@
             this.trackBar2.Enabled = false;
             this.trackBar2.Location = new System.Drawing.Point(126, 503);
             this.trackBar2.Maximum = 100;
+            this.trackBar2.Minimum = 1;
             this.trackBar2.Name = "trackBar2";
             this.trackBar2.Size = new System.Drawing.Size(478, 45);
             this.trackBar2.TabIndex = 8;
+            this.trackBar2.Value = 1;
             this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
             // 
             // label1
@@ -216,7 +218,7 @@
             this.textBoxConfidenceValue.Name = "textBoxConfidenceValue";
             this.textBoxConfidenceValue.Size = new System.Drawing.Size(41, 20);
             this.textBoxConfidenceValue.TabIndex = 21;
-            this.textBoxConfidenceValue.Text = "1";
+            this.textBoxConfidenceValue.Text = "1%";
             this.textBoxConfidenceValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Form1

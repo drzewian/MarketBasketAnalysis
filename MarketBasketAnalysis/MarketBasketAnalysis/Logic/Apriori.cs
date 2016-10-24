@@ -50,8 +50,12 @@ namespace MarketBasketAnalysis.Logic
 
         public void CheckConfidence(int minimumConfidence)
         {
+            List<string> keyList = FrequentItemSets.Keys.ToList();
 
-            int a;
+            foreach(var key in keyList)
+            {
+
+            }
         } 
 
         private Dictionary<string, int> FirstCandidates(List<List<string>> trans)
