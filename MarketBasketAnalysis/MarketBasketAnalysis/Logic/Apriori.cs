@@ -51,6 +51,7 @@ namespace MarketBasketAnalysis.Logic
         public void CheckConfidence(int minimumConfidence)
         {
 
+            int a;
         } 
 
         private Dictionary<string, int> FirstCandidates(List<List<string>> trans)
