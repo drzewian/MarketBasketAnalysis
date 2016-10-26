@@ -101,7 +101,12 @@ namespace MarketBasketAnalysis
         private void button3_Click(object sender, EventArgs e)
         {
             listBox3.Items.Clear();
-            apriori.CheckConfidence(trackBar2.Value);
+            apriori.GetConfidence(trackBar2.Value);
+
+            foreach (var item in apriori.ConfidenceItemSets)
+            {
+                listBox3.Items.Add(item);
+            }
         }
     }
 }

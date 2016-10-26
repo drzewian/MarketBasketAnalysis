@@ -20,6 +20,7 @@ namespace MarketBasketAnalysis.Logic
             this.transactions = transactions;
             MinimumSupportCount = 1;            
             FrequentItemSets = new Dictionary<string, int>();
+            ConfidenceItemSets = new Dictionary<string, double>();
             FirstFrequent = ExtractSupported(FirstCandidates(transactions));
         }
 
@@ -48,13 +49,21 @@ namespace MarketBasketAnalysis.Logic
             }
         }
 
-        public void CheckConfidence(int minimumConfidence)
+        public void GetConfidence(int minimumConfidence)
         {
-            List<string> keyList = FrequentItemSets.Keys.ToList();
+            ConfidenceItemSets = new Dictionary<string, double>();
 
-            foreach(var key in keyList)
+            List<List<string>> result;
+            List<string> set;
+
+            foreach (var key in FrequentItemSets.Keys)
             {
-                 
+                result = new List<List<string>>();
+                set = key.Split(',').ToList();
+
+                GetCombination(set, result);
+
+                ConfidenceItemSets = ConfidenceItemSets.Concat(GetConfidenceList(result, minimumConfidence, key, FrequentItemSets[key])).GroupBy(d => d.Key).ToDictionary(d => d.Key, d => d.First().Value);
             }
         } 
 
@@ -235,6 +244,82 @@ namespace MarketBasketAnalysis.Logic
                 elements.Add(tempString.ToString());
             }
             return elements;
-        } 
+        }
+        
+        private void GetCombination(List<string> set, List<List<string>> result)
+        {
+            for (int i = 0; i < set.Count; i++)
+            {
+                string str = set.Where((s, index) => index != i).ToString();
+
+                List<string> temp = new List<string>(set.Where((s, index) => index != i));
+
+                if (temp.Count > 0 && !result.Where(l => l.Count == temp.Count).Any(l => l.SequenceEqual(temp)))
+                {
+                    result.Add(temp);
+
+                    GetCombination(temp, result);
+                }
+            }
+        }
+
+        private Dictionary<string, double> GetConfidenceList(List<List<string>> candidates, int minimumConfidence, string orginalCandidates, int counter)
+        {
+            Dictionary<string, double> confidenceList = new Dictionary<string, double>();
+            int denominator;
+            double confidence;
+            List<string> tempList = orginalCandidates.Split(',').ToList();            
+            
+            foreach (var list in candidates)
+            {
+                if (list.Count == 1)
+                {
+                    denominator = FirstFrequent[list[0]];
+                }
+                else
+                {
+                    denominator = FindDenominator(list);
+                }
+                confidence = Math.Round((double)counter / (double)denominator * 100, 2);
+
+                if (confidence>= minimumConfidence)
+                {
+                    confidenceList.Add(GetConfidenceString(tempList, list), confidence);
+                }
+            }
+
+            return confidenceList;
+        }
+        
+        private int FindDenominator(List<string> checkedList)
+        {            
+            foreach (var item in FrequentItemSets)
+            {
+                if (!checkedList.Except(item.Key.Split(',').ToList()).Any())
+                {
+                    return item.Value;                    
+                }
+            }
+            return 0;
+        }
+
+        private string GetConfidenceString(List<string> fullString, List<string> candidate)
+        {
+            StringBuilder temp = new StringBuilder(candidate[0]);            
+
+            for(int i = 1; i<candidate.Count; i++)
+            {
+                temp.Append("," + candidate[i]);
+            }
+
+            temp.Append("->");
+            
+            foreach(var item in fullString.Except(candidate))
+            {
+                temp.Append(item + ",");
+            }
+
+            return temp.ToString();
+        }
     }
 }
