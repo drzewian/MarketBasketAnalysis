@@ -46,6 +46,9 @@
             this.textBoxSupportValue = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
             this.textBoxConfidenceValue = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.listBox4 = new System.Windows.Forms.ListBox();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             this.SuspendLayout();
@@ -53,15 +56,15 @@
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(126, 42);
+            this.listBox1.Location = new System.Drawing.Point(342, 40);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(108, 394);
+            this.listBox1.Size = new System.Drawing.Size(200, 394);
             this.listBox1.TabIndex = 0;
             // 
             // button1
             // 
             this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(12, 110);
+            this.button1.Location = new System.Drawing.Point(15, 223);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(108, 23);
             this.button1.TabIndex = 1;
@@ -72,7 +75,7 @@
             // listBox2
             // 
             this.listBox2.FormattingEnabled = true;
-            this.listBox2.Location = new System.Drawing.Point(240, 42);
+            this.listBox2.Location = new System.Drawing.Point(548, 40);
             this.listBox2.Name = "listBox2";
             this.listBox2.Size = new System.Drawing.Size(200, 394);
             this.listBox2.TabIndex = 2;
@@ -80,7 +83,7 @@
             // listBox3
             // 
             this.listBox3.FormattingEnabled = true;
-            this.listBox3.Location = new System.Drawing.Point(446, 42);
+            this.listBox3.Location = new System.Drawing.Point(754, 40);
             this.listBox3.Name = "listBox3";
             this.listBox3.Size = new System.Drawing.Size(200, 394);
             this.listBox3.TabIndex = 4;
@@ -98,7 +101,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(12, 40);
+            this.button2.Location = new System.Drawing.Point(15, 153);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(108, 23);
             this.button2.TabIndex = 7;
@@ -121,7 +124,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(123, 18);
+            this.label1.Location = new System.Drawing.Point(339, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 13);
             this.label1.TabIndex = 9;
@@ -130,7 +133,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(237, 18);
+            this.label2.Location = new System.Drawing.Point(545, 16);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(104, 13);
             this.label2.TabIndex = 10;
@@ -203,7 +206,7 @@
             // button3
             // 
             this.button3.Enabled = false;
-            this.button3.Location = new System.Drawing.Point(12, 180);
+            this.button3.Location = new System.Drawing.Point(15, 293);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(108, 23);
             this.button3.TabIndex = 20;
@@ -221,11 +224,40 @@
             this.textBoxConfidenceValue.Text = "1%";
             this.textBoxConfidenceValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(751, 16);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(61, 13);
+            this.label7.TabIndex = 22;
+            this.label7.Text = "Confidence";
+            // 
+            // listBox4
+            // 
+            this.listBox4.FormattingEnabled = true;
+            this.listBox4.Location = new System.Drawing.Point(136, 40);
+            this.listBox4.Name = "listBox4";
+            this.listBox4.Size = new System.Drawing.Size(200, 394);
+            this.listBox4.TabIndex = 23;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(134, 16);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(68, 13);
+            this.label9.TabIndex = 24;
+            this.label9.Text = "Transactions";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(657, 559);
+            this.ClientSize = new System.Drawing.Size(970, 559);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.listBox4);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.textBoxConfidenceValue);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.textBoxSupportValue);
@@ -275,6 +307,9 @@
         private System.Windows.Forms.TextBox textBoxSupportValue;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox textBoxConfidenceValue;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ListBox listBox4;
+        private System.Windows.Forms.Label label9;
     }
 }
 

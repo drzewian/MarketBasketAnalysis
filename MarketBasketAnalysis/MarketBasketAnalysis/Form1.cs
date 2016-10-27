@@ -14,8 +14,7 @@ using System.Windows.Forms;
 namespace MarketBasketAnalysis
 {    
     public partial class Form1 : Form
-    {
-        List<List<string>> transactions;
+    {        
         Apriori apriori;
         public Form1()
         {
@@ -63,6 +62,7 @@ namespace MarketBasketAnalysis
                         {
                             StreamReader sr = new StreamReader(myStream);
                             LoadTransactions lt = new LoadTransactions(sr);
+                            List<List<string>> transactions;
                             transactions = lt.Load();
                             apriori = new Apriori(transactions);                                                                                     
                         }
@@ -78,9 +78,22 @@ namespace MarketBasketAnalysis
             listBox1.Items.Clear();
             listBox2.Items.Clear();
             listBox3.Items.Clear();
+            listBox4.Items.Clear();
+
+            foreach(var transacion in apriori.transactions)
+            {
+                StringBuilder tempString = new StringBuilder();
+
+                foreach(var item in transacion)
+                {
+                    tempString.Append(item + ", ");
+                }
+                listBox4.Items.Add(tempString.ToString());
+            }
 
             trackBar1.Maximum = apriori.FirstFrequent.Values.ToList().Max();
             labelSupportMax.Text = trackBar1.Maximum.ToString();
+            textBoxSupportValue.Text = trackBar1.Value.ToString();
 
             button1.Enabled = true;
             trackBar1.Enabled = true;

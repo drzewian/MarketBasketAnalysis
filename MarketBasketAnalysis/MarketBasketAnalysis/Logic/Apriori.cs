@@ -8,7 +8,7 @@ namespace MarketBasketAnalysis.Logic
 {
     class Apriori
     {
-        private List<List<string>> transactions;
+        public List<List<string>> transactions { get; private set; }
         public int MinimumSupportCount { get; private set; }        
         public Dictionary<string, int> FrequentItemSets { get; private set; }
         public Dictionary<string, double> ConfidenceItemSets { get; private set; }
@@ -312,7 +312,7 @@ namespace MarketBasketAnalysis.Logic
                 temp.Append("," + candidate[i]);
             }
 
-            temp.Append("->");
+            temp.Append(" -> ");
             
             foreach(var item in fullString.Except(candidate))
             {
