@@ -17,6 +17,8 @@ namespace MarketBasketAnalysis.Logic
         
         public Apriori(List<List<string>> transactions)
         {
+            if (transactions == null)
+                throw new ArgumentException("Parameter cannot be null", "original");
             this.transactions = transactions;
             MinimumSupportCount = 1;            
             FrequentItemSets = new Dictionary<string, int>();
@@ -27,16 +29,13 @@ namespace MarketBasketAnalysis.Logic
         public void SetUp(int minimumSupportCount)
         {
             FrequentItemSets = new Dictionary<string, int>();
+            ConfidenceItemSets = new Dictionary<string, double>();
             MinimumSupportCount = minimumSupportCount;
             FirstFrequent = ExtractSupported(FirstCandidates(transactions));
         }
 
         public void FindFrequent()
-        {
-            if(FirstFrequent == null)
-            {
-                throw new ArgumentNullException();
-            }
+        {            
             Dictionary<string, int> tempCandidates = new Dictionary<string, int>(FirstFrequent);
 
             for(int i =0; i<FirstFrequent.Count - 1; i++)
@@ -68,17 +67,14 @@ namespace MarketBasketAnalysis.Logic
         } 
 
         private Dictionary<string, int> FirstCandidates(List<List<string>> trans)
-        {
-            if (trans == null)
-                return null;
-
+        {   
             Dictionary<string, int> firstCandidates = new Dictionary<string, int>();
 
             foreach (var transaction in trans)
             {
                 foreach (var item in transaction)
                 {
-                    if (firstCandidates != null && firstCandidates.Keys.Contains(item))
+                    if (firstCandidates.Keys.Contains(item))
                     {
                         firstCandidates[item] += 1;
                         continue;
@@ -90,12 +86,7 @@ namespace MarketBasketAnalysis.Logic
         }
         
         private Dictionary<string, int> NextCandidates(List<string> previousCandidates, List<string> firstCandidates)
-        {
-            if(previousCandidates == null || firstCandidates == null)
-            {
-                return null;
-            }
-
+        {            
             List<string> tempList = previousCandidates;
             Dictionary<string, int> nextCandidates = CreateCandidates(previousCandidates, firstCandidates);
 
@@ -165,12 +156,7 @@ namespace MarketBasketAnalysis.Logic
         }
 
         private bool IsContainElement(string firstElement, List<string> secondElement)
-        {
-            if (secondElement == null)
-            {
-                return false;
-            }
-
+        {   
             foreach (var item in secondElement)
             {
                 if (!firstElement.Split(',').ToList().Except(item.Split(',').ToList()).Any())
@@ -200,11 +186,6 @@ namespace MarketBasketAnalysis.Logic
 
         private bool NeedToBePrune(List<string> firstElement, List<string> secondElement)
         {
-            if (firstElement == null || secondElement == null)
-            {
-                return false;
-            }
-
             foreach (var item in firstElement)
             {
                 int counter = 0;
@@ -280,7 +261,7 @@ namespace MarketBasketAnalysis.Logic
                 {
                     denominator = FindDenominator(list);
                 }
-                confidence = Math.Round((double)counter / (double)denominator * 100, 2);
+                confidence = (double)counter / (double)denominator * 100;
 
                 if (confidence>= minimumConfidence)
                 {

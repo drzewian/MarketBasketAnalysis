@@ -32,12 +32,12 @@ namespace MarketBasketAnalysis
 
             foreach (var item in apriori.FirstFrequent)
             {
-                listBox1.Items.Add(item);
+                listBox1.Items.Add(item.Key + " - " + item.Value);
             }
 
             foreach (var item in apriori.FrequentItemSets)
             {
-                listBox2.Items.Add(item);
+                listBox2.Items.Add(item.Key + " - " + item.Value);
             }
 
             button3.Enabled = true;            
@@ -117,8 +117,8 @@ namespace MarketBasketAnalysis
             apriori.GetConfidence(trackBar2.Value);
 
             foreach (var item in apriori.ConfidenceItemSets)
-            {
-                listBox3.Items.Add(item);
+            {                                
+                listBox3.Items.Add(item.Key + " - " + Math.Round(item.Value, 2));
             }
         }
     }
